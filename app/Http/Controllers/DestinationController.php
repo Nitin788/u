@@ -40,7 +40,7 @@ class DestinationController extends Controller
         }
         $destination->save();
 
-        return redirect()->route('destinations.create')->with('success', 'Destination created successfully.');
+        return redirect()->route('hotels.create')->with('success', 'Destination created successfully.');
     }
 
     /**

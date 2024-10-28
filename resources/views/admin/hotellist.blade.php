@@ -42,35 +42,41 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Hotel Name</th>
-                                        <th>Image</th>
-                                        <th>Destination</th>
-                                        <th>Actions</th>
+                                        <th>Country</th> <!-- First column for country -->
+                                        <th>Destination</th> <!-- Second column for destination -->
+                                        <th>Hotel Name</th> <!-- Third column for hotel name -->
+                                        <th>Image</th> <!-- Fourth column for image -->
+                                        <th>Actions</th> <!-- Fifth column for actions -->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($hotels as $hotel)
                                         <tr>
-                                            <td>{{ $hotel->hotel_name }}</td>
+                                            <td>{{ $hotel->destination->country->country_name }}</td>
+                                            <!-- Displaying country name -->
+                                            <td>{{ $hotel->destination->destination_name }}</td>
+                                            <!-- Displaying destination name -->
+                                            <td>{{ $hotel->hotel_name }}</td> <!-- Displaying hotel name -->
                                             <td>
                                                 @if($hotel->hotel_image)
-                                                    <img src="{{ asset($hotel->hotel_image) }}"
-                                                        alt="{{ $hotel->hotel_name }}" width="100" height="50">
+                                                    <img src="{{ asset($hotel->hotel_image) }}" alt="{{ $hotel->hotel_name }}"
+                                                        width="100" height="50">
                                                 @else
                                                     No Image
                                                 @endif
                                             </td>
-                                          
-                                            <td>{{ $hotel->destination->destination_name }}</td>
                                             <td>
-                                                <a href="{{ route('hotels.edit', $hotel->id) }}"
-                                                    class="btn btn-warning">Edit</a>
+                                                <a href="{{ route('hotels.edit', $hotel->id) }}" class="btn btn-warning">
+                                                    <i class="bi bi-pencil-fill"></i>
+                                                </a>
                                                 <form action="{{ route('hotels.destroy', $hotel->id) }}" method="POST"
                                                     onsubmit="return confirm('Are you sure you want to delete this hotel?')"
                                                     style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                    <button type="submit" class="btn btn-danger mt-2">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -92,7 +98,6 @@
         </div>
     </div>
 </div>
-
 <script>
     // Automatically close success message after 10 seconds
     setTimeout(function () {

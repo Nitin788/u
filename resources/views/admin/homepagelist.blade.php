@@ -154,13 +154,14 @@
 
                                                                             <div class="d-flex justify-content-between">
                                                                                 <a href="{{ route('homepages.edit', $homepage->id) }}"
-                                                                                    class="btn btn-warning btn-sm m-3">Edit</a>
+                                                                                    class="btn btn-warning btn-sm m-3"><i class="bi bi-pencil-fill"></i></a>
                                                                                 <form action="{{ route('homepages.destroy', $homepage->id) }}" method="POST"
                                                                                     style="display:inline-block;"
                                                                                     onsubmit="return confirm('Are you sure you want to delete this homepage data?')">
                                                                                     @csrf
                                                                                     @method('DELETE')
-                                                                                    <button type="submit" class="btn btn-danger btn-sm m-3">Delete</button>
+                                                                                    <button type="submit" class="btn btn-danger btn-sm m-3"> <i
+                                                                                            class="bi bi-trash-fill"></i></button>
                                                                                 </form>
                                                                             </div>
 

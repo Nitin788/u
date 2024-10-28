@@ -45,7 +45,6 @@ class HotelController extends Controller
 
         // Create a new hotel instance
         $hotel = new Hotel();
-        $hotel->country_id = $request->country_id;
         $hotel->destination_id = $request->destination_id;
         $hotel->hotel_name = $request->hotel_name;
         $hotel->hotel_description = $request->hotel_description;

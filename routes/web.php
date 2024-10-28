@@ -9,7 +9,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
-//     return view('admin.adddestination');
+//     return view('dashboard');
 // });
 
 // Route::get('/dashboard', function () {
