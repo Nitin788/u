@@ -35,16 +35,18 @@ class HomepageController extends Controller
         // Validate the request
         $request->validate([
             'slider_images' => 'required|array|min:2',
-            'slider_images.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
-            'card_images_title' => 'required|array|min:4',
-            'card_images_title.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
-            'card_title' => 'required|array|min:4',
+            'slider_images.*' => 'image|mimes:jpg,jpeg,png,gif',
+            // 'card_images_title' => 'required|array|min:4',
+            // 'card_images_title.*' => 'image|mimes:jpg,jpeg,png,gif',
+            // 'card_title' => 'required|array|min:4',
             'status' => 'required|boolean',
             'offer_image' => 'required|array|min:3',
-            'offer_image.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+            'offer_image.*' => 'image|mimes:jpg,jpeg,png,gif',
             'offer_title' => 'required|array|min:3',
             'offers' => 'required|array',
             'inclusions' => 'required|array',
+            'footer_images' => 'nullable|array', // Added validation for footer images
+            'footer_images.*' => 'image|mimes:jpg,jpeg,png,gif', // Ensuring valid images for footer
         ]);
 
         // Store slider images
@@ -57,19 +59,13 @@ class HomepageController extends Controller
             }
         }
 
-        // Prepare card data
-        $cardData = [];
-        if ($request->hasFile('card_images_title') && is_array($request->card_title)) {
-            foreach ($request->file('card_images_title') as $index => $file) {
-                if (isset($request->card_title[$index]) && $request->card_title[$index]) {
-                    $fileName = time() . '_' . $file->getClientOriginalName();
-                    $file->move(public_path('card_images_title'), $fileName);
-
-                    $cardData[] = [
-                        'title' => $request->card_title[$index],
-                        'image' => $fileName,
-                    ];
-                }
+        // Store footer images (multiple)
+        $footerImages = [];
+        if ($request->hasFile('footer_images')) {
+            foreach ($request->file('footer_images') as $file) {
+                $footerFileName = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('footer_images'), $footerFileName);
+                $footerImages[] = $footerFileName;
             }
         }
 
@@ -79,7 +75,6 @@ class HomepageController extends Controller
             is_array($request->offer_image) && is_array($request->offer_title) &&
             is_array($request->offers) && is_array($request->inclusions)
         ) {
-
             foreach ($request->offer_image as $index => $file) {
                 if (isset($request->offer_title[$index]) && $request->offer_title[$index]) {
                     $offerFileName = time() . '_' . $file->getClientOriginalName();
@@ -95,18 +90,45 @@ class HomepageController extends Controller
             }
         }
 
+        // Prepare header menu data
+        $headerMenu = [];
+        if (is_array($request->header_menu_title) && is_array($request->header_menu_link)) {
+            foreach ($request->header_menu_title as $index => $title) {
+                if (isset($request->header_menu_link[$index]) && $request->header_menu_link[$index]) {
+                    $headerMenu[] = [
+                        'title' => $title,
+                        'link' => $request->header_menu_link[$index],
+                    ];
+                }
+            }
+        }
+
+        // Prepare footer menu data
+        $footerMenu = [];
+        if (is_array($request->footer_menu_title) && is_array($request->footer_menu_link)) {
+            foreach ($request->footer_menu_title as $index => $title) {
+                if (isset($request->footer_menu_link[$index]) && $request->footer_menu_link[$index]) {
+                    $footerMenu[] = [
+                        'title' => $title,
+                        'link' => $request->footer_menu_link[$index],
+                    ];
+                }
+            }
+        }
+
         // Save the data to the database (you might have a model like Homepage or similar)
         $homepage = new Homepage(); // replace with your actual model
         $homepage->slider_images = json_encode($sliderImages);
-        $homepage->card_images_title = json_encode($cardData);
+        $homepage->footer_images = json_encode($footerImages); // Save footer images as JSON
+        // $homepage->card_images_title = json_encode($cardData);
         $homepage->book_offers = json_encode($bookOffers); // Assuming you have a column for book offers
+        $homepage->header_menu = json_encode($headerMenu); // Save header menu as JSON
+        $homepage->footer_menu = json_encode($footerMenu); // Save footer menu as JSON
         $homepage->status = $request->status;
         $homepage->save();
 
         return redirect()->route('homepages.index')->with('success', 'Homepage created successfully!');
     }
-
-
 
     /**
      * Display the specified resource.
@@ -136,22 +158,23 @@ class HomepageController extends Controller
         // Validate the request
         $request->validate([
             'slider_images' => 'nullable|array',
-            'slider_images.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+            'slider_images.*' => 'image|mimes:jpg,jpeg,png,gif',
             'card_images_title' => 'nullable|array',
-            'card_images_title.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+            'card_images_title.*' => 'image|mimes:jpg,jpeg,png,gif',
             'card_title' => 'nullable|array',
             'status' => 'required|boolean',
             'offer_image' => 'nullable|array',
-            'offer_image.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
+            'offer_image.*' => 'image|mimes:jpg,jpeg,png,gif',
             'offer_title' => 'nullable|array',
             'offers' => 'nullable|array',
             'inclusions' => 'nullable|array',
+            'footer_images' => 'nullable|array', // Added footer_images validation
+            'footer_images.*' => 'image|mimes:jpg,jpeg,png,gif', // Ensuring valid images for footer
         ]);
 
         // Store slider images
         $sliderImages = json_decode($homepage->slider_images, true) ?? [];
 
-        // Handle new slider images
         if ($request->hasFile('slider_images')) {
             // Unlink old images
             foreach ($sliderImages as $oldImage) {
@@ -171,7 +194,6 @@ class HomepageController extends Controller
         // Prepare card data
         $cardData = json_decode($homepage->card_images_title, true) ?? [];
 
-        // Handle new card images and titles
         if ($request->hasFile('card_images_title')) {
             foreach ($request->file('card_images_title') as $index => $file) {
                 if (isset($cardData[$index])) {
@@ -202,7 +224,6 @@ class HomepageController extends Controller
         // Store Book Direct Offers
         $bookOffers = json_decode($homepage->book_offers, true) ?? [];
 
-        // Handle new offer images and corresponding fields
         foreach ($bookOffers as $index => $offer) {
             // Update title, offers, and inclusions if new values are provided
             if (isset($request->offer_title[$index])) {
@@ -232,10 +253,60 @@ class HomepageController extends Controller
             $bookOffers[$index] = $offer; // Update the bookOffers array
         }
 
+        // Handle header menu update
+        $headerMenu = json_decode($homepage->header_menu, true) ?? [];
+        if (is_array($request->header_menu_title) && is_array($request->header_menu_link)) {
+            $headerMenu = [];
+            foreach ($request->header_menu_title as $index => $title) {
+                if (isset($request->header_menu_link[$index]) && $request->header_menu_link[$index]) {
+                    $headerMenu[] = [
+                        'title' => $title,
+                        'link' => $request->header_menu_link[$index],
+                    ];
+                }
+            }
+        }
+
+        // Handle footer menu update
+        $footerMenu = json_decode($homepage->footer_menu, true) ?? [];
+        if (is_array($request->footer_menu_title) && is_array($request->footer_menu_link)) {
+            $footerMenu = [];
+            foreach ($request->footer_menu_title as $index => $title) {
+                if (isset($request->footer_menu_link[$index]) && $request->footer_menu_link[$index]) {
+                    $footerMenu[] = [
+                        'title' => $title,
+                        'link' => $request->footer_menu_link[$index],
+                    ];
+                }
+            }
+        }
+
+        // Store footer images (multiple)
+        $footerImages = json_decode($homepage->footer_images, true) ?? [];
+
+        if ($request->hasFile('footer_images')) {
+            // Unlink old footer images
+            foreach ($footerImages as $oldImage) {
+                if (file_exists(public_path('footer_images/' . $oldImage))) {
+                    unlink(public_path('footer_images/' . $oldImage));
+                }
+            }
+
+            $footerImages = []; // Reset for new images
+            foreach ($request->file('footer_images') as $file) {
+                $footerFileName = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('footer_images'), $footerFileName);
+                $footerImages[] = $footerFileName;
+            }
+        }
+
         // Update the data in the database
         $homepage->slider_images = json_encode(array_values($sliderImages)); // Ensure re-indexing
         $homepage->card_images_title = json_encode($cardData);
         $homepage->book_offers = json_encode($bookOffers);
+        $homepage->header_menu = json_encode($headerMenu); // Save updated header menu
+        $homepage->footer_menu = json_encode($footerMenu); // Save updated footer menu
+        $homepage->footer_images = json_encode($footerImages); // Save footer images
         $homepage->status = $request->status;
         $homepage->save();
 
@@ -255,4 +326,5 @@ class HomepageController extends Controller
         $homepages->delete();
         return redirect()->route('homepages.index')->with('success', 'Homepage Data deleted successfully');
     }
+
 }

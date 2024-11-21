@@ -329,6 +329,12 @@
                                     <input type="file" class="form-control" id="counry_image" name="counry_image"
                                         placeholder="Country Image">
                                 </div>
+                                <!-- Tags Input -->
+                                <!-- <div class="form-group  col-md-4">
+                                    <label for="tags">Tags</label>
+                                    <input type="text" name="tags" class="form-control" data-role="tagsinput"
+                                        placeholder="Enter tags, comma separated">
+                                </div> -->
                             </div>
                             <!-- Other form fields here -->
                             <button type="submit" class="btn btn-primary mt-3">Create</button>

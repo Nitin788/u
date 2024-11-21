@@ -24,7 +24,6 @@
                 </li>
             </ul>
         </div>
-
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -46,11 +45,45 @@
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
-
+                            <!-- Header Menu Card -->
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h3>Header Menu</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="headerMenuContainer">
+                                        @php $headerMenu = json_decode($homepages->header_menu, true); @endphp
+                                        @if (is_array($headerMenu) && count($headerMenu) > 0)
+                                            @foreach($headerMenu as $index => $menu)
+                                                <div class="row mt-3" id="headerMenuRow{{ $index + 1 }}">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="header_menu_title_{{ $index + 1 }}">Menu Title</label>
+                                                        <input type="text" name="header_menu_title[]" class="form-control"
+                                                            id="header_menu_title_{{ $index + 1 }}"
+                                                            placeholder="Enter menu title" value="{{ $menu['title'] }}">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="header_menu_link_{{ $index + 1 }}">Menu Link</label>
+                                                        <input type="text" name="header_menu_link[]" class="form-control"
+                                                            id="header_menu_link_{{ $index + 1 }}" placeholder="Enter menu link"
+                                                            value="{{ $menu['link'] }}">
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p>No header menu items.</p>
+                                        @endif
+                                    </div>
+                                    <input type="button" class="btn btn-success float-right" id="addHeaderMenu"
+                                        value="+">
+                                    <input type="button" class="btn btn-danger float-right mr-2" id="removeHeaderMenu"
+                                        value="-">
+                                </div>
+                            </div>
                             <!-- Slider Images Card -->
                             <div class="card mb-3">
                                 <div class="card-header">
-                                    Slider Images
+                                    <h3>Slider Images</h3>
                                 </div>
                                 <div class="card-body">
                                     <label for="slider_images">Slider Images (multiple)</label>
@@ -75,13 +108,12 @@
                             </div>
 
                             <!-- Card Images and Titles Card -->
-                            <div class="card mb-3">
+                            <!-- <div class="card mb-3">
                                 <div class="card-header">
                                     Card Images and Titles
                                 </div>
                                 <div class="card-body" id="cardContainer">
                                     @php $cardImages = json_decode($homepages->card_images_title); @endphp
-
                                     @if (is_array($cardImages) || is_object($cardImages))
                                         @foreach ($cardImages as $index => $card)
                                             <div class="row mt-3" id="cardRow{{ $index + 1 }}">
@@ -102,19 +134,19 @@
                                                 </div>
                                             </div>
                                         @endforeach
-                                        <input type="button" class="btn btn-success float-right" id="addCard" value="+">
-                                        <input type="button" class="btn btn-danger float-right mr-2" id="cancelCard"
-                                            value="-">
                                     @else
                                         <p>No card images found.</p>
                                     @endif
+                                    <input type="button" class="btn btn-success float-right" id="addCard" value="+">
+                                    <input type="button" class="btn btn-danger float-right mr-2" id="cancelCard"
+                                        value="-">
                                 </div>
-                            </div>
+                            </div> -->
 
                             <!-- Book Offers Card -->
                             <div class="card mb-3">
                                 <div class="card-header">
-                                    Book Offers
+                                    <h3>Book Offers</h3>
                                 </div>
                                 <div class="card-body">
                                     <div id="offerContainer">
@@ -122,6 +154,7 @@
                                         @if (is_array($bookOffers) && count($bookOffers) > 0)
                                             @foreach($bookOffers as $index => $offer)
                                                 <div class="row offer-group mb-3">
+                                                    <hr>
                                                     <div class="form-group col-md-6">
                                                         <label for="offer_image_{{ $index }}">Offer Image</label>
                                                         <input type="file" name="offer_image[]" class="form-control-file"
@@ -151,20 +184,77 @@
                                                     </div>
                                                 </div>
                                             @endforeach
-                                            <input type="button" class="btn btn-success float-right" id="addOffer" value="+">
-                                            <input type="button" class="btn btn-danger float-right mr-2"
-                                                id="removeOffer" value="-">
                                         @else
                                             <p>No book offers available.</p>
                                         @endif
                                     </div>
                                 </div>
                             </div>
-
+                            <!-- Footer Images Card -->
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h3>Footer Images</h3>
+                                </div>
+                                <div class="card-body">
+                                    <label for="footer_images">Footer Images (multiple)</label>
+                                    <input type="file" name="footer_images[]" class="form-control-file"
+                                        id="footer_images" multiple>
+                                    <strong class="form-text text-muted">You can upload multiple images. Current
+                                        images:</strong>
+                                    <div class="mt-2">
+                                        @if ($homepages->footer_images)
+                                            @php    $existingFooterImages = json_decode($homepages->footer_images); @endphp
+                                            @foreach ($existingFooterImages as $image)
+                                                <div>
+                                                    <img class="m-1" src="{{ asset('footer_images/' . $image) }}"
+                                                        alt="Footer Image" width="100" height="70">
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p>No current footer images.</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Footer Menu Card -->
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h3>Footer Menu</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div id="footerMenuContainer">
+                                        @php $footerMenu = json_decode($homepages->footer_menu, true); @endphp
+                                        @if (is_array($footerMenu) && count($footerMenu) > 0)
+                                            @foreach($footerMenu as $index => $menu)
+                                                <div class="row mt-3" id="footerMenuRow{{ $index + 1 }}">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="footer_menu_title_{{ $index + 1 }}">Menu Title</label>
+                                                        <input type="text" name="footer_menu_title[]" class="form-control"
+                                                            id="footer_menu_title_{{ $index + 1 }}"
+                                                            placeholder="Enter menu title" value="{{ $menu['title'] }}">
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="footer_menu_link_{{ $index + 1 }}">Menu Link</label>
+                                                        <input type="text" name="footer_menu_link[]" class="form-control"
+                                                            id="footer_menu_link_{{ $index + 1 }}" placeholder="Enter menu link"
+                                                            value="{{ $menu['link'] }}">
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @else
+                                            <p>No footer menu items.</p>
+                                        @endif
+                                    </div>
+                                    <input type="button" class="btn btn-success float-right" id="addFooterMenu"
+                                        value="+">
+                                    <input type="button" class="btn btn-danger float-right mr-2" id="removeFooterMenu"
+                                        value="-">
+                                </div>
+                            </div>
                             <!-- Status Card -->
                             <div class="card mb-3">
                                 <div class="card-header">
-                                    Status
+                                    <h3>Status</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group mt-3">
@@ -178,8 +268,10 @@
                                     </div>
                                 </div>
                             </div>
+
                             <button type="submit" class="btn btn-primary m-3">Update</button>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -191,83 +283,59 @@
     setTimeout(function () {
         $('#message').alert('close');
     }, 10000);
+    // Add more header menu
+    document.getElementById('addHeaderMenu').addEventListener('click', function () {
+        const container = document.getElementById('headerMenuContainer');
+        const newHeaderMenu = document.createElement('div');
+        newHeaderMenu.className = 'form-group mt-3';
+        newHeaderMenu.innerHTML = `
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="header_menu_title">Menu Title</label>
+                                <input type="text" name="header_menu_title[]" class="form-control" placeholder="Enter menu title">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="header_menu_link">Menu Link</label>
+                                <input type="text" name="header_menu_link[]" class="form-control" placeholder="Enter menu link">
+                            </div>
+                            <hr class="mt-3">
+                        </div>`;
+        container.appendChild(newHeaderMenu);
+    });
+    // Remove last header menu
+    document.getElementById('removeHeaderMenu').addEventListener('click', function () {
+        const container = document.getElementById('headerMenuContainer');
+        if (container.children.length > 1) {
+            container.removeChild(container.lastChild);
+        }
+    });
+    // Add more footer menu
+    document.getElementById('addFooterMenu').addEventListener('click', function () {
+        const container = document.getElementById('footerMenuContainer');
+        const newFooterMenu = document.createElement('div');
+        newFooterMenu.className = 'form-group mt-3';
+        newFooterMenu.innerHTML = `
+                                    <dic class=""row">
+                                                <div class="col-md-6">
+                                                    <label for="footer_menu_title">Menu Title</label>
+                                                    <input type="text" name="footer_menu_title[]" class="form-control" placeholder="Enter menu title">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="footer_menu_link">Menu Link</label>
+                                                    <input type="text" name="footer_menu_link[]" class="form-control" placeholder="Enter menu link">
+                                                </div>
+                                                <hr class="mt-3">
+                                                </div>
+                                            `;
+        container.appendChild(newFooterMenu);
+    });
+    // Remove last footer menu
+    document.getElementById('removeFooterMenu').addEventListener('click', function () {
+        const container = document.getElementById('footerMenuContainer');
+        if (container.children.length > 1) {
+            container.removeChild(container.lastChild);
+        }
+    });
 </script>
-@push('EditaddCard')
-    <script>
-        let cardCount = {{ count($cardImages) }}; // Initialize with existing card count
-        let offerCount = {{ count($bookOffers) }}; // Initialize with existing offer count
 
-        // Add Card
-        document.getElementById('addCard').addEventListener('click', function () {
-            cardCount++;
-            const cardContainer = document.getElementById('cardContainer');
-
-            // Create new row for additional card inputs
-            const newCardRow = document.createElement('div');
-            newCardRow.className = 'row mt-3';
-            newCardRow.id = `cardRow${cardCount}`;
-
-            // Create card image input
-            const cardImageDiv = document.createElement('div');
-            cardImageDiv.className = 'form-group col-md-6';
-            cardImageDiv.innerHTML = `
-                                <label for="card_images_title_${cardCount}">Card Image</label>
-                                <input type="file" name="card_images_title[]" class="form-control-file" id="card_images_title_${cardCount}">
-                            `;
-
-            // Create card title input
-            const cardTitleDiv = document.createElement('div');
-            cardTitleDiv.className = 'form-group col-md-6';
-            cardTitleDiv.innerHTML = `
-                                <label for="card_title_${cardCount}">Card Title</label>
-                                <input type="text" name="card_title[]" class="form-control" placeholder="Enter card title">
-                            `;
-
-            // Append new inputs to the new row
-            newCardRow.appendChild(cardImageDiv);
-            newCardRow.appendChild(cardTitleDiv);
-
-            // Append new row to the card container
-            cardContainer.appendChild(newCardRow);
-        });
-
-        // Cancel Card
-        document.getElementById('cancelCard').addEventListener('click', function () {
-            if (cardCount > 1) { // Ensure at least one card is present
-                const cardContainer = document.getElementById('cardContainer');
-                const lastCardRow = document.getElementById(`cardRow${cardCount}`);
-                cardContainer.removeChild(lastCardRow); // Remove the last added row
-                cardCount--; // Decrement the count
-            }
-        });
-
-        // Add Offer
-        document.getElementById('addOffer').addEventListener('click', function () {
-            offerCount++;
-            const offerContainer = document.getElementById('offerContainer');
-            const newOfferGroup = offerContainer.firstElementChild.cloneNode(true);
-
-            // Clear the input values in the cloned fields
-            Array.from(newOfferGroup.querySelectorAll('input')).forEach(input => {
-                input.value = '';
-                // Reset the ID for the cloned inputs
-                input.id = input.id.replace(/\d+$/, offerCount); // Update the ID to the new count
-            });
-
-            // Append the cloned group to the container
-            offerContainer.appendChild(newOfferGroup);
-        });
-
-        // Cancel Offer
-        document.getElementById('removeOffer').addEventListener('click', function () {
-            const offerGroups = document.querySelectorAll('.offer-group');
-            if (offerGroups.length > 1) {
-                // Remove the last offer group
-                offerGroups[offerGroups.length - 1].remove();
-            } else {
-                alert('At least one offer must be present.');
-            }
-        });
-    </script>
-@endpush
 @endsection

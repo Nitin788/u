@@ -1,5 +1,4 @@
 @extends('admin.app')
-
 @section('content')
 <div class="container">
     <div class="page-inner">
@@ -46,11 +45,35 @@
                         <hr />
                         <form action="{{ route('homepages.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-
+                            <!-- Header Menu Section -->
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h3>Header Menu</h3>
+                                </div>
+                                <div class="card-body">
+                                    <strong class="form-text text-muted mb-3">Add menu links for the header
+                                        menu.</strong>
+                                    <div id="headerMenuContainer" class="row">
+                                        <div class="form-group mt-3 col-md-6">
+                                            <label for="header_menu_title">Menu Title</label>
+                                            <input type="text" name="header_menu_title[]" class="form-control"
+                                                id="header_menu_title" placeholder="Enter menu title">
+                                        </div>
+                                        <div class="form-group mt-3 col-md-6">
+                                            <label for="header_menu_link">Menu Link</label>
+                                            <input type="text" name="header_menu_link[]" class="form-control"
+                                                id="header_menu_link" placeholder="Enter menu link">
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <input type="button" id="addHeaderMenu" class="btn btn-danger mt-3" value="+">
+                                    <input type="button" id="removeHeaderMenu" class="btn btn-warning mt-3" value="-">
+                                </div>
+                            </div>
                             <!-- Slider Images Card -->
                             <div class="card mb-3">
                                 <div class="card-header">
-                                    Slider Images
+                                    <h3>Slider Images</h3>
                                 </div>
                                 <div class="card-body">
                                     <strong class="form-text text-muted mb-3">You can upload multiple images. Minimum 2
@@ -60,40 +83,39 @@
                                         id="slider_images" multiple required>
                                 </div>
                             </div>
-
                             <!-- Card Section -->
                             <div class="card mb-3">
-                                <div class="card-header">
-                                    Card Images and Titles
-                                </div>
+                                <!-- <div class="card-header ">
+                                    <h3>Card Images and Titles</h3>
+                                </div> -->
                                 <div class="card-body">
-                                    <strong class="form-text text-muted mb-3">You can upload multiple Card images.
-                                        Minimum 4 images and titles required.</strong>
+                                    <!-- <strong class="form-text text-muted mb-3">You can upload multiple Card images.
+                                        Minimum 4 images and titles required.</strong> -->
                                     <div id="cardContainer" class="row">
                                         <div class="form-group mt-3 col-md-6">
-                                            <label for="card_images_title">Card Image</label>
-                                            <input type="file" name="card_images_title[]" class="form-control-file"
-                                                id="card_images_title" required>
+                                            <!-- <label for="card_images_title">Card Image</label> -->
+                                            <input type="hidden" name="card_images_title[]" class="form-control-file"
+                                                id="card_images_title">
                                         </div>
                                         <div class="form-group mt-3 col-md-6">
-                                            <label for="card_title">Card Title</label>
-                                            <input type="text" name="card_title[]" class="form-control" id="card_title"
-                                                placeholder="Enter card title" required>
+                                            <!-- <label for="card_title">Card Title</label> -->
+                                            <input type="hidden" name="card_title[]" class="form-control"
+                                                id="card_title" placeholder="Enter card title">
                                         </div>
+                                        <!-- <hr> -->
                                     </div>
-                                    <input type="button" id="addCard" class="btn btn-danger mt-3" value="+">
-                                    <input type="button" id="cancelCard" class="btn btn-warning mt-3" value="-">
+                                    <input type="hidden" id="addCard" class="btn btn-danger mt-3" value="+">
+                                    <input type="hidden" id="cancelCard" class="btn btn-warning mt-3" value="-">
                                 </div>
                             </div>
-
                             <!-- Book Direct Offer Section -->
                             <div class="card mb-3">
                                 <div class="card-header">
-                                    Book Direct Offer
+                                    <h3>Book Direct Offer</h3>
                                 </div>
                                 <div class="card-body">
                                     <strong class="form-text text-muted mb-3">Fill in the details for the Book Direct
-                                        Offer.</strong>
+                                        Offer. Minimum 3 Offer required.</strong>
                                     <div id="offerContainer">
                                         <div class="row offer-group mb-3">
                                             <div class="form-group  col-md-6">
@@ -116,17 +138,56 @@
                                                 <input type="text" name="inclusions[]" class="form-control"
                                                     placeholder="Enter inclusions details" required>
                                             </div>
+                                            <hr class="mt-3">
                                         </div>
                                     </div>
-                                    
+
                                     <input type="button" id="addOffer" class="btn btn-danger mt-3" value="+">
                                     <input type="button" id="removeOffer" class="btn btn-warning mt-3" value="-">
+                                </div>
+                            </div>
+                            <!-- Footer Images Section -->
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h3>Footer Images</h3>
+                                </div>
+                                <div class="card-body">
+                                    <strong class="form-text text-muted mb-3">You can upload multiple footer images.
+                                       </strong>
+                                    <label for="footer_images">Footer Images (multiple)</label>
+                                    <input type="file" name="footer_images[]" class="form-control-file"
+                                        id="footer_images" multiple>
+                                </div>
+                            </div>
+                            <!-- Footer Menu Section -->
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h3>Footer Menu</h3>
+                                </div>
+                                <div class="card-body">
+                                    <strong class="form-text text-muted mb-3">Add menu links for the footer
+                                        menu.</strong>
+                                    <div class="row" id="footerMenuContainer">
+                                        <div class="form-group mt-3 col-md-6">
+                                            <label for="footer_menu_title">Menu Title</label>
+                                            <input type="text" name="footer_menu_title[]" class="form-control"
+                                                id="footer_menu_title" placeholder="Enter menu title">
+                                        </div>
+                                        <div class="form-group mt-3 col-md-6">
+                                            <label for="footer_menu_link">Menu Link</label>
+                                            <input type="text" name="footer_menu_link[]" class="form-control"
+                                                id="footer_menu_link" placeholder="Enter menu link">
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <input type="button" id="addFooterMenu" class="btn btn-danger mt-3" value="+">
+                                    <input type="button" id="removeFooterMenu" class="btn btn-warning mt-3" value="-">
                                 </div>
                             </div>
                             <!-- Status Card -->
                             <div class="card mb-3">
                                 <div class="card-header">
-                                    Status
+                                    <h3>Status</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group mt-3">
@@ -157,42 +218,38 @@
 
 @push('addCard')
     <script>
-        let cardCount = 1; // To track the number of card inputs
+        // let cardCount = 1; // To track the number of card inputs
 
-        document.getElementById('addCard').addEventListener('click', function () {
-            cardCount++;
-            const cardContainer = document.getElementById('cardContainer');
+        // document.getElementById('addCard').addEventListener('click', function () {
+        //     cardCount++;
+        //     const cardContainer = document.getElementById('cardContainer');
 
-            // Create new row for additional card inputs
-            const newCardRow = document.createElement('div');
-            newCardRow.className = 'row mt-3';
-            newCardRow.id = `cardRow${cardCount}`;
+        //     // Create new row for additional card inputs
+        //     const newCardRow = document.createElement('div');
+        //     newCardRow.className = 'row mt-3';
+        //     newCardRow.id = `cardRow${cardCount}`;
 
-            // Create card image input
-            const cardImageDiv = document.createElement('div');
-            cardImageDiv.className = 'form-group col-md-6';
-            cardImageDiv.innerHTML = `
-                                                                <label for="card_images_title">Card Image</label>
-                                                                <input type="file" name="card_images_title[]" class="form-control-file" id="card_images_title_${cardCount}">
-                                                            `;
+        //     // Create card image input
+        //     const cardImageDiv = document.createElement('div');
+        //     cardImageDiv.className = 'form-group col-md-6';
+        //     cardImageDiv.innerHTML = `
+        //                     <label for="card_images_title">Card Image</label>
+        //                     <input type="file" name="card_images_title[]" class="form-control-file" id="card_images_title_${cardCount}">`;
+        //     // Create card title input
+        //     const cardTitleDiv = document.createElement('div');
+        //     cardTitleDiv.className = 'form-group col-md-6';
+        //     cardTitleDiv.innerHTML = `
+        //                 <label for="card_title">Card Title</label>
+        //                 <input type="text" name="card_title[]" class="form-control" placeholder="Enter card title">`;
+        //     // Append new inputs to the new row
+        //     newCardRow.appendChild(cardImageDiv);
+        //     newCardRow.appendChild(cardTitleDiv);
 
-            // Create card title input
-            const cardTitleDiv = document.createElement('div');
-            cardTitleDiv.className = 'form-group col-md-6';
-            cardTitleDiv.innerHTML = `
-                                                                <label for="card_title">Card Title</label>
-                                                                <input type="text" name="card_title[]" class="form-control" placeholder="Enter card title">
+        //     // Append new row to the card container
+        //     cardContainer.appendChild(newCardRow);
+        // });
 
-                                                            `;
-            // Append new inputs to the new row
-            newCardRow.appendChild(cardImageDiv);
-            newCardRow.appendChild(cardTitleDiv);
-
-            // Append new row to the card container
-            cardContainer.appendChild(newCardRow);
-        });
-
-        // offer 
+        // offer Section 
 
         document.getElementById('cancelCard').addEventListener('click', function () {
             if (cardCount > 1) { // Ensure at least one card is present
@@ -224,6 +281,61 @@
             } else {
                 alert('At least one offer must be present.');
             }
+        });
+
+        // Add more header menu
+        document.getElementById('addHeaderMenu').addEventListener('click', function () {
+            const container = document.getElementById('headerMenuContainer');
+            const newHeaderMenu = document.createElement('div');
+            newHeaderMenu.className = 'form-group mt-3';
+            newHeaderMenu.innerHTML = `
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="header_menu_title">Menu Title</label>
+                                        <input type="text" name="header_menu_title[]" class="form-control" placeholder="Enter menu title">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="header_menu_link">Menu Link</label>
+                                        <input type="url" name="header_menu_link[]" class="form-control" placeholder="Enter menu link">
+                                    </div>
+                                    <hr class="mt-3">
+                                </div>`;
+            container.appendChild(newHeaderMenu);
+        });
+        // Remove last header menu
+        document.getElementById('removeHeaderMenu').addEventListener('click', function () {
+            const container = document.getElementById('headerMenuContainer');
+            if (container.children.length > 1) {
+                container.removeChild(container.lastChild);
+            }
+        });
+        // Add more footer menu
+        document.getElementById('addFooterMenu').addEventListener('click', function () {
+            const container = document.getElementById('footerMenuContainer');
+            const newFooterMenu = document.createElement('div');
+            newFooterMenu.className = 'form-group mt-3';
+            newFooterMenu.innerHTML = `
+                                            <dic class=""row">
+                                                        <div class="col-md-6">
+                                                            <label for="footer_menu_title">Menu Title</label>
+                                                            <input type="text" name="footer_menu_title[]" class="form-control" placeholder="Enter menu title">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="footer_menu_link">Menu Link</label>
+                                                            <input type="url" name="footer_menu_link[]" class="form-control" placeholder="Enter menu link">
+                                                        </div>
+                                                        <hr class="mt-3">
+                                                        </div>
+                                                    `;
+            container.appendChild(newFooterMenu);
+        });
+        // Remove last footer menu
+        document.getElementById('removeFooterMenu').addEventListener('click', function () {
+            const container = document.getElementById('footerMenuContainer');
+            if (container.children.length > 1) {
+                container.removeChild(container.lastChild);
+            }
+
         });
     </script>
 @endpush

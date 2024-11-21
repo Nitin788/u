@@ -32,7 +32,7 @@ class CountryController extends Controller
         // Validate the incoming request
         $request->validate([
             'country' => 'required|string|max:255|unique:countries,country_name', // Assuming 'countries' is the table name and 'name' is the column
-            'counry_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'counry_image' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         // Handle the file upload

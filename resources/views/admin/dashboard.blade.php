@@ -114,7 +114,7 @@
                                                                             <!-- Slider Images Card -->
                                                                             <div class="card mb-3">
                                                                                 <div class="card-header">
-                                                                                    <h5>Slider Images for Homepage ID: {{ $homepage->id }}</h5>
+                                                                                    <h5>Slider Images for Homepage</h5>
                                                                                 </div>
                                                                                 <div class="card-body">
                                                                                     <div class="slider-images mb-2">
@@ -153,7 +153,7 @@
                                                                                     @endforeach
                                                                                 </div>
                                                                             @else
-                                                                                <p>No Card Images</p>
+                                                                                <!-- <p>No Card Images</p> -->
                                                                             @endif
 
                                                                             <!-- Book Offers Details -->
@@ -181,7 +181,7 @@
                                                                                                         <p><strong>Inclusions:</strong> {{ $offer['inclusions'] }}
                                                                                                         </p>
                                                                                                     </div>
-                                                                                                <hr>
+                                                                                                    <hr>
                                                                                                 </div>
                                                                                             </div>
                                                                                         @endforeach
@@ -190,6 +190,43 @@
                                                                             @else
                                                                                 <p>No Book Offers Available</p>
                                                                             @endif
+
+                                                                            <!-- Status Card -->
+                                                                            <!-- <div class="card mb-3">
+                                                                                                                                                        <div class="card-header">
+                                                                                                                                                            <h6>Status</h6>
+                                                                                                                                                        </div>
+                                                                                                                                                        <div class="card-body">
+                                                                                                                                                            <p>{{ $homepage->status == 1 ? 'Active' : 'Inactive' }}</p>
+                                                                                                                                                        </div>
+                                                                                                                                                    </div> -->
+                                                                            <!-- Footer Images Section -->
+                                                                            <div class="card mb-3">
+                                                                                <div class="card-header">
+                                                                                    <h3>Footer Images</h3>
+                                                                                </div>
+                                                                                <div class="card-body">
+                                                                                    <div class="footer-images">
+                                                                                        @if ($homepage->footer_images)
+                                                                                                                                        @php
+                                                                                                                                            $footerImages = json_decode($homepage->footer_images);
+                                                                                                                                        @endphp
+                                                                                                                                        <div class="row">
+                                                                                                                                            @foreach ($footerImages as $image)
+                                                                                                                                                <div class="col-md-3">
+                                                                                                                                                    <div class="mb-3">
+                                                                                                                                                        <img src="{{ asset('footer_images/' . $image) }}"
+                                                                                                                                                            alt="Footer Image" width="100" height="70">
+                                                                                                                                                    </div>
+                                                                                                                                                </div>
+                                                                                                                                            @endforeach
+                                                                                                                                        </div>
+                                                                                        @else
+                                                                                            <p>No Footer Images Available</p>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
 
                                                                             <div class="d-flex justify-content-between">
                                                                                 <a href="{{ route('homepages.edit', $homepage->id) }}"
@@ -203,15 +240,6 @@
                                                                                 </form>
                                                                             </div>
 
-                                                                            <!-- Status Card -->
-                                                                            <div class="card mb-3">
-                                                                                <div class="card-header">
-                                                                                    <h6>Status</h6>
-                                                                                </div>
-                                                                                <div class="card-body">
-                                                                                    <p>{{ $homepage->status == 1 ? 'Active' : 'Inactive' }}</p>
-                                                                                </div>
-                                                                            </div>
                                                                         </div>
                                     @endforeach
                                 </div>

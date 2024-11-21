@@ -6,8 +6,8 @@
             </ul>
         </nav>
         <div class="copyright">
-            © Copyright <strong><span>@2024</span></strong><a href="https://plutotours.in/">PTW Holidays Private Limited
-            </a>
+            © Copyright <strong><span id="currentYear"></span></strong> <a href="https://plutotours.in/">PTW Holidays
+                Private Limited</a>
         </div>
         <div>
             Developed by
@@ -15,6 +15,9 @@
         </div>
     </div>
 </footer>
+<script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+</script>
 <!-- Start Footer -->
 <!--   Core JS Files   -->
 <script src="{{asset('assets/js/core/jquery-3.7.1.min.js')}}"></script>
@@ -22,13 +25,10 @@
 <script src="{{asset('assets/js/core/bootstrap.min.js')}}"></script>
 <!-- jQuery Scrollbar -->
 <script src="{{asset('assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js')}}"></script>
-
 <!-- Chart JS -->
 <script src="{{asset('assets/js/plugin/chart.js/chart.min.js')}}"></script>
-
 <!-- jQuery Sparkline -->
 <script src="{{asset('assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js')}}"></script>
-
 <!-- Chart Circle -->
 <script src="{{asset('assets/js/plugin/chart-circle/circles.min.js')}}"></script>
 

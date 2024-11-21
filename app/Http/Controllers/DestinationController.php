@@ -29,7 +29,7 @@ class DestinationController extends Controller
     {
         $request->validate([
             'destination_name' => 'required|string|max:255|unique:destinations,destination_name',
-            'destination_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'destination_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'country_id' => 'required|exists:countries,id',
         ]);
         $destination = new Destination($request->all());

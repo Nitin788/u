@@ -27,7 +27,7 @@ class HotelController extends Controller
     public function create()
     {
         $destinations = Destination::all();
-        return view('admin.addhotel', compact( 'destinations'));
+        return view('admin.addhotel', compact('destinations'));
     }
 
     /**
@@ -39,7 +39,7 @@ class HotelController extends Controller
         $request->validate([
             'destination_id' => 'required|exists:destinations,id',
             'hotel_name' => 'required|string|max:255|unique:hotels,hotel_name,',
-            'hotel_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'hotel_image' => 'required|image|mimes:jpeg,png,jpg,gif',
             'hotel_description' => 'nullable|string',
         ]);
 
@@ -80,7 +80,7 @@ class HotelController extends Controller
         // Retrieve the list of countries and destinations
         $destinations = Destination::all();
 
-        return view('admin.edithotel', compact('hotel',  'destinations'));
+        return view('admin.edithotel', compact('hotel', 'destinations'));
     }
 
     /**
@@ -91,7 +91,7 @@ class HotelController extends Controller
         $request->validate([
             'destination_id' => 'required|exists:destinations,id',
             'hotel_name' => 'required|string|max:255',
-            'hotel_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'hotel_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'hotel_description' => 'nullable|string',
         ]);
 
@@ -129,4 +129,22 @@ class HotelController extends Controller
         // Redirect with success message
         return redirect()->route('hotels.index')->with('success', 'Hotel deleted successfully.');
     }
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        $results = Hotel::with(['country', 'destination'])
+            ->where('name', 'LIKE', "%{$search}%") // Search in hotel name
+            ->orWhereHas('country', function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%"); // Search in country name
+            })
+            ->orWhereHas('destination', function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%"); // Search in destination name
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10); // Adjust pagination as needed
+
+        return view('your.view.name', compact('results'));
+    }
+
 }

@@ -38,7 +38,28 @@
                         @endif
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+                      <div class="table-responsive">
+                        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6">
+                                            <div class="dataTables_length" id="basic-datatables_length">
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6">
+                                            <div id="basic-datatables_filter" class="dataTables_filter">
+                                                <label>Search:
+                                                    <input type="search" class="form-control form-control-sm"
+                                                        placeholder="" aria-controls="basic-datatables">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -52,7 +73,9 @@
                                 <tbody>
                                     @foreach ($hotels as $hotel)
                                         <tr>
-                                            <td>{{ $hotel->destination->country->country_name }}</td>
+                                            <td>
+                                                {{ $hotel->destination->country ? $hotel->destination->country->country_name : 'No country' }}
+                                            </td>
                                             <!-- Displaying country name -->
                                             <td>{{ $hotel->destination->destination_name }}</td>
                                             <!-- Displaying destination name -->
@@ -93,6 +116,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
