@@ -92,6 +92,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="{{route('countries.index')}}">
+                                    <span class="sub-item">Country List</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{{route('hotels.index')}}">
                                     <span class="sub-item">Location&Hotels List</span>
                                 </a>

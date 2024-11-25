@@ -69,17 +69,53 @@ class CountryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Country $country)
+    public function edit(Country $countries, $id)
     {
-        //
+        $countries = Country::findOrFail($id); // Find the country by ID
+        return view('admin.editcountry', compact('countries')); // Pass the country to the view
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Country $country)
+    public function update(Request $request, Country $countries, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'country_image' => 'nullable|image|mimes:jpg,jpeg,png', // Validation for the image
+        ]);
+
+        $countries = Country::findOrFail($id);
+
+        // Update the country name
+        $countries->country_name = $request->input('name');
+
+        // If a new image is uploaded, store it and update the country record
+        if ($request->hasFile('country_image')) {
+            // Delete the old image from storage if it's being replaced
+            if ($countries->image) {
+                $oldImagePath = public_path('country_images/' . $countries->image);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);  // Delete the old image
+                }
+            }
+
+            // Get the file and move it to the public directory
+            $file = $request->file('country_image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();  // Create a unique filename
+            $path = 'country_images/' . $filename;
+
+            // Move the file to the public directory
+            $file->move(public_path('country_images'), $filename);
+
+            // Update the image path in the database
+            $countries->country_image = $path;
+        }
+
+        // Save the updated country
+        $countries->save();
+
+        return redirect()->route('countries.index')->with('success', 'Country updated successfully.');
     }
 
     /**

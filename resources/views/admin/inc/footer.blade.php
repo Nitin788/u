@@ -1,17 +1,22 @@
 <!-- End Footer -->
+
+
 <footer class="footer">
     <div class="container-fluid d-flex justify-content-between">
         <nav class="pull-left">
             <ul class="nav">
+                
             </ul>
-        </nav>
+        </nav>   
         <div class="copyright">
             © Copyright <strong><span id="currentYear"></span></strong> <a href="https://plutotours.in/">PTW Holidays
                 Private Limited</a>
         </div>
         <div>
             Developed by
-            <a href="#">Nitin Jamwal</a>
+            <a
+                href="https://www.linkedin.com/in/nitin-jamwal-9a1b6527a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Nitin
+                Jamwal</a>
         </div>
     </div>
 </footer>
@@ -49,8 +54,8 @@
 <script src="{{asset('assets/js/kaiadmin.min.js')}}"></script>
 
 <!-- Kaiadmin DEMO methods, don't include it in your project! -->
-<script src="{{asset('assets/js/setting-demo.js')}}"></script>
-<script src="{{asset('assets/js/demo.js')}}"></script>
+<!-- <script src="{{asset('assets/js/setting-demo.js')}}"></script>
+<script src="{{asset('assets/js/demo.js')}}"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 <script>
